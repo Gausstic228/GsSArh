@@ -86,7 +86,7 @@ def update():
     except Exception as e:
         print(f">> Ошибка при проверке обновлений: {e}")
 
-version = 0.1
+version = 0.2
 update_message = "fix"
 update()
 
