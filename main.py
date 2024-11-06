@@ -2,12 +2,16 @@ import requests
 import random, datetime, sys, time, argparse, os
 from requests import post, get
 import json
-from termcolor import colored
+from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
+from rich import box
+import time
 
 set = [1, 10]
 fav_phones = []
 
-# Файл конфигурации
+
 if not os.path.isfile("config.data"):
     with open('config.data', 'w') as filehandle:  
         for listitem in set:
@@ -66,14 +70,18 @@ def update():
         response = requests.get("https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/update.txt")
         response_text = response.text.splitlines()
         
+        # Убираем все лишние пробелы и кавычки из версии
         latest_version_str = response_text[0].split('=')[1].strip().strip('"')
-        latest_version = float(latest_version_str)
+        latest_version = float(latest_version_str)  # Преобразуем в float после очистки
         
-        update_info = response_text[1].split('=')[1].strip('"'    
+        update_info = response_text[1].split('=')[1].strip('"')
+        
         if latest_version > version:
             print(">> Найдено обновление: ", latest_version)
             print(">> Информация об обновлении: ", update_info)
             print(">> Начинается обновление...")
+
+            # Загрузка новой версии скрипта
             script_url = "https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/main.py"
             new_script = requests.get(script_url)
             with open("NanoBomber.py", "wb") as f:
@@ -307,8 +315,11 @@ def info():
 if update() == "exit": exit()
 time.sleep(1)
 
+console = Console()
+
+
 while True:
-    banner = ("\n" * 100)+ r"""
+    banner = r"""
    ______     _____
   / ____/____/ ___/
  / / __/ ___/\__ \ 
@@ -316,8 +327,18 @@ while True:
 \____/____//____/  
                                      
     """
-    print(banner)
-    menu = input(">> 1 - БОМБЕР\n>> 2 - НАСТРОЙКИ\n>> 3 - Номера в избранном\n>> 4 - ИНФОРМАЦИЯ\n\n>> 0 - Выход\n>> Ваш выбор: ")
+
+    banner_text = Text(banner, style="bold green", justify="center")
+    console.print(Panel(banner_text, box=box.SQUARE, expand=True, title=f"Bomber {str(version)}", style="green"))
+
+    menu_text = Text(">> 1 - Бомбер\n>> 2 - Настройки\n>> 3 - Номера в избранном\n>> 4 - Информация\n\n>> 0 - Выход\n", style="bold green")
+    menu_panel = Panel(menu_text, box=box.SQUARE, title="Меню", title_align="center", style="green")
+    console.print(menu_panel)
+
+    console.print(Text(">> Ваш выбор: ", style="bold green"), end='')
+
+    menu = console.input()
+
     if menu == "0": exit()
     if menu == "1": bomb()
     if menu == "2": settings()
