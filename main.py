@@ -61,7 +61,7 @@ def save_phones():
 
 def update():
     global version
-    print("Проверка обновлений...")
+    print(">> Проверка обновлений...")
     try:
         response = requests.get("https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/update.txt")
         response_text = response.text.splitlines()
@@ -73,28 +73,25 @@ def update():
         update_info = response_text[1].split('=')[1].strip('"')
         
         if latest_version > version:
-            print(f"Найдено обновление: {latest_version}")
-            print(f"Информация об обновлении: {update_info}")
-            print("Начинается обновление...")
-            
+            print(">> Найдено обновление: ", latest_version)
+            print(">> Информация об обновлении: ", update_info)
+            print(">> Начинается обновление...")
+
             # Загрузка новой версии скрипта
             script_url = "https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/main.py"
             new_script = requests.get(script_url)
             with open("NanoBomber.py", "wb") as f:
                 f.write(new_script.content)
             
-            print("\nОбновление завершено. Перезапуск программы.")
-            os.execv(sys.executable, ['python'] + sys.argv)  # Перезапуск программы
+            print("\n>> Обновление завершено. Перезапуск программы.")
+            os.execv(sys.executable, ['python'] + sys.argv)
         else:
-            print("Установлена последняя версия, обновления не требуются.")
+            print(">> Установлена последняя версия, обновления не требуются.")
     except Exception as e:
-        print(f"Ошибка при проверке обновлений: {e}")
+        print(f">> Ошибка при проверке обновлений: {e}")
 
-version = 0.1  # Версия как число с плавающей точкой
-
-update_message = "Я че ебу?"
-
-# Вызываем функцию обновления
+version = 0.1
+update_message = "fix"
 update()
 
 
@@ -306,7 +303,9 @@ def settings():
 
 def info():
     global banner, version
-    print(banner+"\nВерсия "+str(version)+"\n\nБомбер создан только для развлекательных целей. За все действия что вы с ним проводите отвечаете только вы!\n\nСоздатель Telegram - @artem450\n\nНажмите ENTER чтобы выйти")
+    print(banner + "\n>> Версия: " + str(version) + "")
+    print(">> Создатель: GsS")
+    print("\n>> Нажмите ENTER чтобы выйти")
     input()
 
 if update() == "exit": exit()
@@ -322,7 +321,7 @@ while True:
                                      
     """
     print(banner)
-    menu = input("1 - БОМБЕР\n2 - НАСТРОЙКИ\n3 - Номера в избранном\n4 - ИНФОРМАЦИЯ\n\n0 - Выход\n")
+    menu = input(">> 1 - БОМБЕР\n>> 2 - НАСТРОЙКИ\n>> 3 - Номера в избранном\n>> 4 - ИНФОРМАЦИЯ\n\n>> 0 - Выход\n>> Ваш выбор: ")
     if menu == "0": exit()
     if menu == "1": bomb()
     if menu == "2": settings()
