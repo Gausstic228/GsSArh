@@ -1,2 +1,2 @@
-version = "0.1"
-update = "Я че ебу?"
+version = "0.2"
+update = "fix"
