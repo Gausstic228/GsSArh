@@ -66,18 +66,14 @@ def update():
         response = requests.get("https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/update.txt")
         response_text = response.text.splitlines()
         
-        # Убираем все лишние пробелы и кавычки из версии
         latest_version_str = response_text[0].split('=')[1].strip().strip('"')
-        latest_version = float(latest_version_str)  # Преобразуем в float после очистки
+        latest_version = float(latest_version_str)
         
-        update_info = response_text[1].split('=')[1].strip('"')
-        
+        update_info = response_text[1].split('=')[1].strip('"'    
         if latest_version > version:
             print(">> Найдено обновление: ", latest_version)
             print(">> Информация об обновлении: ", update_info)
             print(">> Начинается обновление...")
-
-            # Загрузка новой версии скрипта
             script_url = "https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/main.py"
             new_script = requests.get(script_url)
             with open("NanoBomber.py", "wb") as f:
