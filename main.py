@@ -4,7 +4,6 @@ from requests import post, get
 import json
 from termcolor import colored
 
-version = 1.7
 set = [1, 10]
 fav_phones = []
 
@@ -66,7 +65,11 @@ def update():
     try:
         response = requests.get("https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/update.txt")
         response_text = response.text.splitlines()
-        latest_version = float(response_text[0].split('=')[1].strip('"'))
+        
+        # Убираем все лишние пробелы и кавычки из версии
+        latest_version_str = response_text[0].split('=')[1].strip().strip('"')
+        latest_version = float(latest_version_str)  # Преобразуем в float после очистки
+        
         update_info = response_text[1].split('=')[1].strip('"')
         
         if latest_version > version:
@@ -75,7 +78,7 @@ def update():
             print("Начинается обновление...")
             
             # Загрузка новой версии скрипта
-            script_url = "http://gs-comp.000.pe/bomber/bomber.py"
+            script_url = "https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/main.py"
             new_script = requests.get(script_url)
             with open("NanoBomber.py", "wb") as f:
                 f.write(new_script.content)
@@ -86,6 +89,15 @@ def update():
             print("Установлена последняя версия, обновления не требуются.")
     except Exception as e:
         print(f"Ошибка при проверке обновлений: {e}")
+
+version = 0.1  # Версия как число с плавающей точкой
+
+update_message = "Я че ебу?"
+
+# Вызываем функцию обновления
+update()
+
+
 
 def send_sms(serv):
     global _phone, _phone9, _phone9dostavista, _phoneOstin, _phonePizzahut, _phoneGorzdrav, _name, password, username, email, _email
