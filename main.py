@@ -5,12 +5,34 @@ import os
 import sys
 from rich.console import Console
 from rich.text import Text
+from rich.panel import Panel
+import time
 
 console = Console()
 
+def get_random_proxy():
+    try:
+        response = requests.get("https://api.proxyscrape.com/v3/free-proxy-list/get?request=displayproxies")
+        proxies = response.text.splitlines()
+        if proxies:
+            return random.choice(proxies)
+    except Exception as e:
+        console.print(f">> Ошибка при получении списка прокси: {e}", style="bold red")
+    return None
+
+def get_proxy_location(proxy):
+    try:
+        response = requests.get(f"http://ip-api.com/json/{proxy.split(':')[0]}")
+        data = response.json()
+        if data['status'] == 'success':
+            return f"{data['country']}, {data['city']}"
+    except Exception as e:
+        console.print(f">> Ошибка при получении информации о местоположении прокси: {e}", style="bold red")
+    return "Неизвестно"
+
 def update():
     global version
-    console.print(">> Проверка обновлений...", style="blue")
+    console.print("\n[?] Проверка обновлений...", style="bold dark_red")
     try:
         response = requests.get("https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/update.txt")
         response_text = response.text.splitlines()
@@ -21,37 +43,63 @@ def update():
         update_info = response_text[1].split('=')[1].strip('"')
         
         if latest_version > version:
-            console.print(Text(f"[?] Найдено обновление: {latest_version}", style="dark_blue"))
-            console.print(Text(f"[?] Информация об обновлении: {update_info}", style="dark_blue"))
-            console.print(Text("[?] Начинается обновление...", style="dark_blue"))
+            console.print(Text(f"[?] Найдено обновление: {latest_version}", style="bold green"))
+            console.print(Text(f"[?] Информация об обновлении: {update_info}", style="bold green"))
+            console.print(Text("[?] Начинается обновление...", style="bold green"))
 
             script_url = "https://raw.githubusercontent.com/Gausstic228/GsSArh/refs/heads/main/main.py"
             new_script = requests.get(script_url)
             with open("main.py", "wb") as f:
                 f.write(new_script.content)
             
-            console.print("\n>> Обновление завершено. Перезапуск программы.", style="blue")
+            console.print("\n>> Обновление завершено. Перезапуск программы.", style="bold blue")
             os.execv(sys.executable, ['python'] + sys.argv)
         else:
-            console.print(">> Установлена последняя версия, обновления не требуются.", style="blue")
+            console.print(">> Установлена последняя версия, обновления не требуются.", style="bold blue")
     except Exception as e:
-        console.print(f">> Ошибка при проверке обновлений: {e}", style="red")
+        console.print(f">> Ошибка при проверке обновлений: {e}", style="bold red")
 
 version = 0.2
-update()  # Вызов функции обновления
+update()
 
-console.print(Text(r'''
-  _____      __      _      __      _     ____       ____    _____      __      _   ________  
- (_   _)    /  \    / )    /  \    / )   / __ \     / ___)  / ___/     /  \    / ) (___  ___) 
-   | |     / /\ \  / /    / /\ \  / /   / /  \ \   / /     ( (__      / /\ \  / /      ) )    
-   | |     ) ) ) ) ) )    ) ) ) ) ) )  ( ()  () ) ( (       ) __)     ) ) ) ) ) )     ( (     
-   | |    ( ( ( ( ( (    ( ( ( ( ( (   ( ()  () ) ( (      ( (       ( ( ( ( ( (       ) )    
-  _| |__  / /  \ \/ /    / /  \ \/ /    \ \__/ /   \ \___   \ \___   / /  \ \/ /      ( (     
- /_____( (_/    \__/    (_/    \__/      \____/     \____)   \____\ (_/    \__/       /__\    
-''', style="blue"))  # art object
+time.sleep(2)
+os.system("cls")
 
-phone = console.input('[!] Введите номер телефона> ')  # номер телефона
-countT = console.input('[!] Введите количество потоков> ')  # количество потоков
+console.print(Text("Bomber by GsS", style="bold red"), justify="center")
+
+logo = '''
+ .S   .S_sSSs     .S_sSSs      sSSs_sSSs      sSSs    sSSs   .S_sSSs    sdSS_SSSSSSbs  
+.SS  .SS~YS%%b   .SS~YS%%b    d%%SP~YS%%b    d%%SP   d%%SP  .SS~YS%%b   YSSS~S%SSSSSP  
+S%S  S%S   `S%b  S%S   `S%b  d%S'     `S%b  d%S'    d%S'    S%S   `S%b       S%S       
+S%S  S%S    S%S  S%S    S%S  S%S       S%S  S%S     S%S     S%S    S%S       S%S       
+S&S  S%S    S&S  S%S    S&S  S&S       S&S  S&S     S&S     S%S    S&S       S&S       
+S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S_Ss  S&S    S&S       S&S       
+S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S~SP  S&S    S&S       S&S       
+S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S     S&S    S&S       S&S       
+S*S  S*S    S*S  S*S    S*S  S*b       d*S  S*b     S*b     S*S    S*S       S*S       
+S*S  S*S    S*S  S*S    S*S  S*S.     .S*S  S*S.    S*S.    S*S    S*S       S*S       
+S*S  S*S    S*S  S*S    S*S   SSSbs_sdSSS    SSSbs   SSSbs  S*S    S*S       S*S       
+S*S  S*S    SSS  S*S    SSS    YSSP~YSSY      YSSP    YSSP  S*S    SSS       S*S       
+SP   SP          SP                                         SP               SP        
+Y    Y           Y                                          Y                Y         
+'''
+
+console.print(Text(logo, style="bold red"), justify="center")
+
+proxy = get_random_proxy()
+if proxy:
+    location = get_proxy_location(proxy)
+    location_info = f"Местоположение: {location} (IP: {proxy})"
+else:
+    location_info = "[PROXY: OFF]"
+
+console.print(f"[bold white on red]Местоположение: {location} (IP: {proxy})[/bold white on red]", justify="right")
+
+phone_input = Text("[!] Введите номер телефона> ", style="bold red")
+phone = console.input(phone_input)
+
+count_input = Text("[!] Введите количество потоков> ", style="bold red")
+countT = console.input(count_input)
 
 iteration = 0
 _name = ''
