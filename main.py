@@ -59,7 +59,7 @@ def update():
     except Exception as e:
         console.print(f">> Ошибка при проверке обновлений: {e}", style="bold red")
 
-version = 0.2
+version = 0.3
 update()
 
 time.sleep(2)
