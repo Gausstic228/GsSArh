@@ -7,6 +7,7 @@ from rich.console import Console
 from rich.text import Text
 from rich.panel import Panel
 import time
+import platform
 
 console = Console()
 
@@ -59,32 +60,41 @@ def update():
     except Exception as e:
         console.print(f">> Ошибка при проверке обновлений: {e}", style="bold red")
 
-version = 0.3
+version = 0.4
 update()
 
 time.sleep(2)
-os.system("cls")
+os.system("cls" if os.name == "nt" else "clear")
 
-console.print(Text("Bomber by GsS", style="bold red"), justify="center")
+if platform.system() == "Linux":
+    banner = r'''
+     __    _____  ___   _____  ___      ______    ______    _______  _____  ___  ___________
+    |" \\  (\"   \|"  \\ (\"   \|"  \\    /    " \\  /" _  "\\  /"     "|(\"   \|"  \\("     _   ")
+    ||  | |.\\   \\    ||.\\   \\    |  // ____  \\(: ( \\___)(: ______)|.\\   \\    |)__/  \\__/  
+    |:  | |: \\ .   \\\\  ||: \\ .   \\  | /  /    ) :)\\/ \\      \\/    |  |: \\ .   \\  |   \\_ /     
+    |.  | |.  \\    \\. ||.  \\    \\. |(: (____/ // //  \\ _   // ___)_ |.  \\    \\. |   |.  |     
+    /\\  |\\|    \\    \\ ||    \\    \\ | \\        / (:   _) \\ (:      "||    \\    \\ |   \\:  |     
+    (__\\_|_)\\___|\\____\\) \\___|\\____\\)  \\"_____/   \\_______) \\_______) \\___|\\____\\)    \\__|     
+    '''
+else:
+    banner = r'''
+     .S   .S_sSSs     .S_sSSs      sSSs_sSSs      sSSs    sSSs   .S_sSSs    sdSS_SSSSSSbs  
+    .SS  .SS~YS%%b   .SS~YS%%b    d%%SP~YS%%b    d%%SP   d%%SP  .SS~YS%%b   YSSS~S%SSSSSP  
+    S%S  S%S   `S%b  S%S   `S%b  d%S'     `S%b  d%S'    d%S'    S%S   `S%b       S%S       
+    S%S  S%S    S%S  S%S    S%S  S%S       S%S  S%S     S%S     S%S    S%S       S%S       
+    S&S  S%S    S&S  S%S    S&S  S&S       S&S  S&S     S&S     S%S    S&S       S&S       
+    S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S_Ss  S&S    S&S       S&S       
+    S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S~SP  S&S    S&S       S&S       
+    S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S     S&S    S&S       S&S       
+    S*S  S*S    S*S  S*S    S*S  S*b       d*S  S*b     S*b     S*S    S*S       S*S       
+    S*S  S*S    S*S  S*S    S*S  S*S.     .S*S  S*S.    S*S.    S*S    S*S       S*S       
+    S*S  S*S    S*S  S*S    S*S   SSSbs_sdSSS    SSSbs   SSSbs  S*S    S*S       S*S       
+    S*S  S*S    SSS  S*S    SSS    YSSP~YSSY      YSSP    YSSP  S*S    SSS       S*S       
+    SP   SP          SP                                         SP               SP        
+    Y    Y           Y                                          Y                Y         
+    '''
 
-logo = '''
- .S   .S_sSSs     .S_sSSs      sSSs_sSSs      sSSs    sSSs   .S_sSSs    sdSS_SSSSSSbs  
-.SS  .SS~YS%%b   .SS~YS%%b    d%%SP~YS%%b    d%%SP   d%%SP  .SS~YS%%b   YSSS~S%SSSSSP  
-S%S  S%S   `S%b  S%S   `S%b  d%S'     `S%b  d%S'    d%S'    S%S   `S%b       S%S       
-S%S  S%S    S%S  S%S    S%S  S%S       S%S  S%S     S%S     S%S    S%S       S%S       
-S&S  S%S    S&S  S%S    S&S  S&S       S&S  S&S     S&S     S%S    S&S       S&S       
-S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S_Ss  S&S    S&S       S&S       
-S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S~SP  S&S    S&S       S&S       
-S&S  S&S    S&S  S&S    S&S  S&S       S&S  S&S     S&S     S&S    S&S       S&S       
-S*S  S*S    S*S  S*S    S*S  S*b       d*S  S*b     S*b     S*S    S*S       S*S       
-S*S  S*S    S*S  S*S    S*S  S*S.     .S*S  S*S.    S*S.    S*S    S*S       S*S       
-S*S  S*S    S*S  S*S    S*S   SSSbs_sdSSS    SSSbs   SSSbs  S*S    S*S       S*S       
-S*S  S*S    SSS  S*S    SSS    YSSP~YSSY      YSSP    YSSP  S*S    SSS       S*S       
-SP   SP          SP                                         SP               SP        
-Y    Y           Y                                          Y                Y         
-'''
-
-console.print(Text(logo, style="bold red"), justify="center")
+console.print(Text(banner, style="bold red"), justify="center")
 
 proxy = get_random_proxy()
 if proxy:
@@ -93,7 +103,7 @@ if proxy:
 else:
     location_info = "[PROXY: OFF]"
 
-console.print(f"[bold white on red]Местоположение: {location} (IP: {proxy})[/bold white on red]", justify="right")
+console.print(f"[bold white on red]{location_info}[/bold white on red]", justify="right")
 
 phone_input = Text("[!] Введите номер телефона> ", style="bold red")
 phone = console.input(phone_input)
